@@ -1,0 +1,17 @@
+FROM python:3.8
+
+ENV APP /prod_ready_flask
+
+RUN mkdir ${APP}
+WORKDIR ${APP}
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+
+# 9090 - uwsgi
+# 9191 - uwsgi stats
+EXPOSE 9090 
+EXPOSE 9191
+
+CMD ["uwsgi", "--ini", "uwsgi.ini"]

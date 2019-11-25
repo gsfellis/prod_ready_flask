@@ -1,0 +1,31 @@
+version: '3.1'
+services:
+
+  nginx:
+    image: nginx:latest
+    build:
+      context: ./
+      dockerfile: Dockerfile-nginx
+    depends_on:
+      - uwsgi_flask    
+    networks:
+      - my-network
+    ports:
+      - 80:80
+
+  uwsgi_flask:
+    build:
+      context: ./
+      dockerfile: Dockerfile-prod_ready_flask
+    image: prod_ready_flask:latest
+    container_name: uwsgi_flask
+    volumes:
+      - ./:/prod_ready_flask/
+    networks:
+      my-network:
+        aliases:
+          - uwsgi_flask
+
+networks:
+  my-network:
+  
